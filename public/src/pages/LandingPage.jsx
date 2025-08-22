@@ -11,13 +11,13 @@ const LandingPage = () => {
             <div className="d-flex flex-column justify-content-center">
                 <div>
 
-                    <Typography variant="h1" fontWeight="bold" gutterBottom >
+                    <h1 variant="h1" fontWeight="bold" className="h1 h-md-1">
                         German Industrial Club
-                    </Typography>
+                    </h1>
 
-                    <Typography variant="h6" color="text.secondary" mb={4}>
+                    <h2 variant="h6" color="text.secondary" mb={4}>
                         Connecting industries, ideas, and innovation.
-                    </Typography>
+                    </h2>
                 </div>
                 <div>
 

@@ -6,7 +6,9 @@ import NProgress from 'nprogress';
 import { useEffect, useRef } from "react";
 import LandingPage from './pages/LandingPage';
 import VideoPage from './pages/VideoPage';
-
+import Layout from './components/Layout';
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import theme from "./theme"; // pick one of the two above
 
 const RouteLoader = () => {
   const location = useLocation();
@@ -32,9 +34,11 @@ function AppRoutes() {
     <>
       <RouteLoader />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/videos" element={<VideoPage />} />
-        
+
+        <Route path="/" element={<Layout />}>
+          <Route index element={<LandingPage />} />
+          <Route path="videos" element={<VideoPage />} />
+        </Route>
       </Routes>
     </>
   );
@@ -43,7 +47,10 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppRoutes />
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

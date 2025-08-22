@@ -31,24 +31,9 @@ const VideoPage = () => {
 
     return (
        
-            <div className="container-fluid mt-4" >
+            <div className="container-fluid pt-3" >
                 <div className="row">
-                    {/* Playlist Section */}
-                    <div className="col-12 col-md-4">
-                        <h5>Playlist</h5>
-                        <ul className="list-group">
-                            {dummyVideos.map((video) => (
-                                <li key={video.id} className="list-group-item">
-                                    <button
-                                        className="btn btn-link p-0 text-start w-100"
-                                        onClick={() => setSelectedVideo(video)}
-                                    >
-                                        {video.title}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                   
                     {/* Main Video Player */}
                     <div className="col-12 col-md-8 mb-4">
                         <div className="mb-3">
@@ -56,7 +41,7 @@ const VideoPage = () => {
                                 key={selectedVideo.id}
                                 src={selectedVideo.src}
                                 controls
-                                className="w-100 rounded"
+                                className="rounded video-player"
                             />
                             <h5 className="mt-2">{selectedVideo.title}</h5>
                         </div>
@@ -89,7 +74,22 @@ const VideoPage = () => {
                             ))}
                         </div>
                     </div>
-
+ {/* Playlist Section */}
+                    <div className="col-12 col-md-4">
+                        <h5>Playlist</h5>
+                        <ul className="list-group">
+                            {dummyVideos.map((video) => (
+                                <li key={video.id} className="list-group-item">
+                                    <button
+                                        className="btn btn-link p-0 text-start w-100"
+                                        onClick={() => setSelectedVideo(video)}
+                                    >
+                                        {video.title}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
     );

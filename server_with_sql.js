@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 5500;
 const session = require('express-session');
 
-// const registration = require('./routes/registration');
+const registration = require('./routes/registration');
 
 // Setup DB connection
 const db = new sqlite3.Database("./app.db", (err) => {
@@ -36,6 +36,11 @@ const db = new sqlite3.Database("./app.db", (err) => {
     }
 })();
 
+app.use(cors({
+    origin: process.env.CLIENT_ORIGIN,
+    credentials: true
+}));
+
 app.use(session({
     secret: 'your-secret-key',       // required
     resave: false,                   // don't save session if unmodified
@@ -56,6 +61,7 @@ app.use(cors({
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
+
 app.use((req, res, next) => {
     console.log(`Received request for: ${req.url}`);
     next();
@@ -63,8 +69,16 @@ app.use((req, res, next) => {
 
 app.use('/uploads', express.static(path.join(__dirname, 'file_storage')));
 
+app.use('/', registration);
+// Route to serve your main HTML file
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
-// app.use('/', registration);
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public", "index.html"));
+// });
+
 
 
 // Start the server

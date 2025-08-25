@@ -11,6 +11,17 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --color-primary: #0D1B2A;   /* Dark navy */
+  --color-primary-contrast: #ffffff;
+
+  --color-secondary: #D4AF37; /* Gold */
+  --color-secondary-contrast: #ffffff;
+
+  --color-background-default: #F5F5F5;
+  --color-background-paper: #ffffff;
+
+  --color-text-primary: #0D1B2A;
+  --color-text-secondary: #555555;
 }
 
 a {
@@ -25,7 +36,7 @@ a:hover {
 body {
   margin: 0;
   position: relative;
-  
+  overflow-x: hidden;
   min-width: 320px;
   min-height: 100vh;
 }

@@ -9,13 +9,13 @@ const LandingPage = () => {
     return (
         
             <div className="d-flex flex-column justify-content-center">
-                <div>
+                <div className="landing-page">
 
-                    <h1 variant="h1" fontWeight="bold" className="h1 h-md-1">
+                    <h1>
                         German Industrial Club
                     </h1>
 
-                    <h2 variant="h6" color="text.secondary" mb={4}>
+                    <h2>
                         Connecting industries, ideas, and innovation.
                     </h2>
                 </div>

@@ -47,7 +47,6 @@ main{
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-content: center;
   padding-top: 64px;
 }
 
@@ -59,3 +58,104 @@ main{
   border-radius: 10px;    /* optional styling */
 }
 
+.registration{
+  width: 50dvw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 1rem;
+  place-items: center;
+  overflow: hidden;
+  >form {
+    background-color: #ffffff; 
+    padding: 20px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+  
+    margin: 20px auto; 
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s; /* smooth hover animation */
+    
+  }
+}
+
+.landing-page{
+  >h1{
+    font-size: 6rem;
+    padding-bottom: 1rem;
+  }
+
+  >h2{
+    padding-bottom: 1.5rem;
+  }
+}
+
+ @media only screen and (max-width: 1400px) {
+  .registration{
+    width: 60dvw;
+  }
+} 
+
+ @media only screen and (max-width: 1200px) {
+  .registration{
+    width: 70dvw;
+  }
+  .landing-page{
+  >h1{
+    font-size: 4rem;
+  
+  }
+   >h2{
+    padding-bottom: 1rem;
+  }
+  
+}
+} 
+
+ @media only screen and (max-width: 1000px) {
+  .registration{
+    width: 80dvw;
+  }
+} 
+
+ @media only screen and (max-width: 768px) {
+  .registration{
+    width: 90dvw;
+  }
+    .landing-page{
+      >h1{
+        font-size: 3rem;
+      
+      }
+  }
+} 
+
+.MuiInputBase-root {
+  
+      > input{
+    height: 23px  !important;
+  }
+}
+
+.MuiSelect-select {
+ > input{
+    height: 20px  !important;
+  }
+}
+/* .MuiInputBase-root, .MuiSelect-select {
+  > input{
+    height: 20px  !important;
+  }
+} 
+.MuiSelect-select.MuiSelect-outlined {
+        height: 20px  !important;
+        > input{
+    height: 20px  !important;
+  }
+} */
+
+#nprogress .bar {
+  background: var(--color-secondary) !important; 
+  height: 3px;
+  z-index: 9999 !important; /* ensures it's above header */
+}

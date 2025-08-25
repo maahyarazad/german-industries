@@ -9,6 +9,8 @@ import VideoPage from './pages/VideoPage';
 import Layout from './components/Layout';
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./theme"; // pick one of the two above
+import RegistrationPage from "./pages/RegisterationPage";
+import LoginPage from './pages/LoginPage';
 
 const RouteLoader = () => {
   const location = useLocation();
@@ -38,6 +40,7 @@ function AppRoutes() {
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
           <Route path="videos" element={<VideoPage />} />
+          <Route path="login" element={<LoginPage />} />
         </Route>
       </Routes>
     </>

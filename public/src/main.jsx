@@ -7,9 +7,11 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-
+import { AppStateProvider } from './AppState';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
+    <AppStateProvider>
+      <App />
+    </AppStateProvider>
+  </StrictMode>
 )

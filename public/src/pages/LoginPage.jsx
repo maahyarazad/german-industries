@@ -7,10 +7,15 @@ import { TextField, Button, CircularProgress, Box } from "@mui/material";
 import { snackbarSignal } from '../components/Snackbar';
 import { InputAdornment, IconButton } from "@mui/material";
 import { CiLock } from "react-icons/ci";
+import { useAppState } from "../AppState";
+import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
-const LoginPage = () => {
+const LoginPage = ({onAuth}) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const {user} = useAppState();
+    const navigate = useNavigate();
     const initialValues = {
         email: "",
         password: "",
@@ -44,20 +49,16 @@ const LoginPage = () => {
             });
 
             if (data.status) {
+                onAuth?.(true)
+                user.value = data.user;
+                localStorage.setItem("gic-user", JSON.stringify(data.user));
                 // Redirect to dashboard or homepage
-                window.location.href = "/videos";
-               
-                // Save login state in a cookie
-                const expires = new Date();
-                expires.setTime(expires.getTime() + 1 * 24 * 60 * 60 * 1000); // 1 day
-                document.cookie = `gic-login=${encodeURIComponent(values.email)}; expires=${expires.toUTCString()}; path=/;`;
-
-                // Redirect to dashboard or homepage
-                window.location.href = "/videos";
-        
+                navigate("/videos")
             }
+            
 
         } catch (error) {
+            onAuth?.(false)
             snackbarSignal.open({
                 message: error.message,
             });

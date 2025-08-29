@@ -1,15 +1,15 @@
 
 import './App.css'
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import 'nprogress/nprogress.css';
 import NProgress from 'nprogress';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import LandingPage from './pages/LandingPage';
 import VideoPage from './pages/VideoPage';
 import Layout from './components/Layout';
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./theme"; // pick one of the two above
-import RegistrationPage from "./pages/RegisterationPage";
+import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 
 const RouteLoader = () => {
@@ -32,15 +32,50 @@ const RouteLoader = () => {
 };
 
 function AppRoutes() {
+  const [authenticated, setAuthenticated] = useState(false);
+  const handleAuth = (success) => {
+    setAuthenticated(success);
+  };
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/gic-user/check-auth", {
+          method: "GET",
+          credentials: "include", // send cookies
+        });
+
+
+        if (!res.ok) throw new Error("Network response was not ok");
+        setAuthenticated(true);
+
+
+      } catch (err) {
+        debugger;
+        setAuthenticated(false);
+      } finally {
+
+      }
+    };
+
+    checkAuth();
+  }, []);
+
   return (
     <>
       <RouteLoader />
       <Routes>
-
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
-          <Route path="videos" element={<VideoPage />} />
-          <Route path="login" element={<LoginPage />} />
+          <Route path="login" element={<LoginPage onAuth={handleAuth} />} />
+
+          {/* Protected route inside Layout */}
+          <Route
+            path="videos"
+            element={
+              authenticated ? <VideoPage /> : <Navigate to="/login" replace />
+            }
+          />
         </Route>
       </Routes>
     </>
@@ -48,6 +83,8 @@ function AppRoutes() {
 }
 
 function App() {
+
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>

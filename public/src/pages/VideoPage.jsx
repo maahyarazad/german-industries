@@ -4,7 +4,6 @@ import {
     Typography,
     Grid,
     List,
-    ListItem,
     ListItemButton,
     ListItemText,
     TextField,
@@ -41,6 +40,7 @@ const VideoPage = () => {
                                 key={selectedVideo.id}
                                 src={selectedVideo.src}
                                 controls
+                                controlsList="nodownload"
                                 className="rounded video-player"
                             />
                             <h5 className="mt-2">{selectedVideo.title}</h5>

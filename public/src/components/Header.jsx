@@ -1,5 +1,5 @@
 // components/Header.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -7,65 +7,128 @@ import {
   IconButton,
   Drawer,
   useMediaQuery,
+  Typography,
+  Box,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { useAppState } from "../AppState";
 
-const Header = ({ user, onLogout }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const navigate = useNavigate();
+const Header = () => {
+    const theme = useTheme();
+    const navigate = useNavigate();
+    const { user } = useAppState(); // signals-react state
+    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const toggleDrawer = (open) => () => setDrawerOpen(open);
+    
+    useEffect(() => {
+        const savedUser = localStorage.getItem("gic-user");
+        if (savedUser && (!user.value || Object.keys(user.value).length === 0)) {
+            try {
+                user.value = JSON.parse(savedUser);
+                setIsLoggedIn(user.value && Object.keys(user.value).length > 0)
+            } catch (err) {
+                console.error("Failed to parse saved user:", err);
+                localStorage.removeItem("gic-user"); 
+            }
+        }
+  }, [user]);
 
-  const toggleDrawer = (open) => () => setDrawerOpen(open);
+  useEffect(()=>{
+    setIsLoggedIn(user.value && Object.keys(user.value).length > 0)
+  }, [user])
+
+   const handleLogout = async () => {
+          try {
+              
+
+              const response = await fetch(`${import.meta.env.VITE_SERVER_URL_GIC}/gic-user/logout`, {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                   credentials: "include"
+              });
+  
+              const data = await response.json();
+  
+              if (!data.authenticated) {
+                  navigate("/")
+                  user.value = null;
+                //   setIsLoggedIn(false);
+                localStorage.removeItem("gic-user"); 
+                  
+                  
+              }
+              
+  
+          } catch (error) {
+              console.error("Failed to logout user:", error);
+          } finally {
+              
+          }
+      };
+
+
+
 
   const guestLinks = (
-    <div className="d-flex gap-2">
-      <Button color="inherit" className="text-capitalize">
+    <Box display="flex" gap={2}>
+      <Button
+        color="inherit"
+        className="text-capitalize"
+        onClick={() => navigate("/login")}
+      >
         Login
       </Button>
       <Button
         color="secondary"
         className="text-capitalize"
         variant="contained"
-        onClick={() => navigate("/registration")}
+        onClick={() =>
+          window.location.assign(
+            "https://services.german-emirates-club.com/registration/gic-registration"
+          )
+        }
       >
         Register
       </Button>
-    </div>
+    </Box>
   );
 
   const userLinks = (
-    <div className="d-flex align-items-center gap-3">
-      <span className="fw-normal">Welcome, {user?.name}</span>
-      <Button color="inherit" onClick={onLogout} className="text-capitalize">
+    <Box display="flex" alignItems="center" gap={2}>
+      <Typography variant="body1">
+        Welcome, {user.value?.firstName || "User"}
+      </Typography>
+      <Button color="inherit" className="text-capitalize" onClick={handleLogout}>
         Logout
       </Button>
-    </div>
+    </Box>
   );
 
   return (
     <>
-      <AppBar
-        position="fixed"
-        sx={{ backgroundColor: theme.palette.primary.main, top: 0 }}
-      >
-        <Toolbar className="d-flex justify-content-between">
+      <AppBar position="fixed" sx={{ backgroundColor: theme.palette.primary.main }}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           {/* Brand Name */}
-          <h6 className="m-0 fw-bold" onClick={()=> navigate("/")}>German Industrial Club</h6>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: "bold", cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          >
+            German Industrial Club
+          </Typography>
 
           {/* Desktop Menu */}
-          {!isMobile && (user ? userLinks : guestLinks)}
+          {!isMobile && (isLoggedIn ? userLinks : guestLinks)}
 
           {/* Mobile Menu Button */}
           {isMobile && (
-            <IconButton
-              edge="end"
-              color="inherit"
-              aria-label="menu"
-              onClick={toggleDrawer(true)}
-            >
+            <IconButton edge="end" color="inherit" onClick={toggleDrawer(true)}>
               <MenuIcon />
             </IconButton>
           )}
@@ -74,28 +137,29 @@ const Header = ({ user, onLogout }) => {
 
       {/* Drawer for Mobile */}
       <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <div
-          className="p-3"
+        <Box
+          sx={{ width: 250, p: 2 }}
           role="presentation"
           onClick={toggleDrawer(false)}
-          style={{ width: "250px" }}
         >
-          {user ? (
-            <div className="d-flex flex-column gap-2">
-              <div className="mb-2">Welcome, {user.name}</div>
+          {isLoggedIn ? (
+            <Box display="flex" flexDirection="column" gap={2}>
+              <Typography>Welcome, {user.value?.firstName}</Typography>
               <Button
                 variant="text"
                 color="primary"
-                onClick={onLogout}
+                onClick={handleLogout}
                 className="text-capitalize"
               >
                 Logout
               </Button>
-            </div>
+            </Box>
           ) : (
-            <div className="d-flex flex-column gap-2">{guestLinks}</div>
+            <Box display="flex" flexDirection="column" gap={2}>
+              {guestLinks}
+            </Box>
           )}
-        </div>
+        </Box>
       </Drawer>
     </>
   );

@@ -159,3 +159,12 @@ main{
   height: 3px;
   z-index: 9999 !important; /* ensures it's above header */
 }
+
+
+.login-page{
+  
+  width: 100vw;
+  height: 80vh;
+  align-self: center;
+  place-self: center;
+}

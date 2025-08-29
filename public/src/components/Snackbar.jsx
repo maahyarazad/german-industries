@@ -65,7 +65,7 @@ export default function AppSnackbar() {
     }}
        message={
                
-                <div className='d-flex justify-content-between w-100' style={{minWidth:400 , maxWidth: 600}}>
+                <div className='d-flex justify-content-between' style={{minWidth:400 , maxWidth: 600}}>
                     <div className='d-flex justify-content-center align-items-center'>
                         <div className="d-flex justify-content-center align-items-center">
                             {

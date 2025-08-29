@@ -2,9 +2,12 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import { useAppState } from "../AppState";
 const LandingPage = () => {
     const navigate = useNavigate();
+const { todos, completed } = useAppState();
+console.log(todos.value)
+console.log(completed.value)
 
     return (
         
@@ -13,6 +16,7 @@ const LandingPage = () => {
 
                     <h1>
                         German Industrial Club
+                        
                     </h1>
 
                     <h2>
@@ -26,8 +30,8 @@ const LandingPage = () => {
                         color="primary"
                         size="large"
                         sx={{ textTransform: "none", width: "200px" }}
-                        onClick={() => navigate("/videos")}>
-                        Go to Videos
+                        onClick={() => navigate("/login")}>
+                        Login to continue
                     </Button>
                 </div>
 

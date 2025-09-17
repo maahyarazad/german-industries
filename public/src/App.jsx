@@ -11,6 +11,8 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./theme"; // pick one of the two above
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
+import { useAppState } from "./AppState";
+
 
 const RouteLoader = () => {
   const location = useLocation();
@@ -32,34 +34,6 @@ const RouteLoader = () => {
 };
 
 function AppRoutes() {
-  const [authenticated, setAuthenticated] = useState(false);
-  const handleAuth = (success) => {
-    setAuthenticated(success);
-  };
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await fetch("/gic-user/check-auth", {
-          method: "GET",
-          credentials: "include", // send cookies
-        });
-
-
-        if (!res.ok) throw new Error("Network response was not ok");
-        setAuthenticated(true);
-
-
-      } catch (err) {
-        debugger;
-        setAuthenticated(false);
-      } finally {
-
-      }
-    };
-
-    checkAuth();
-  }, []);
 
   return (
     <>
@@ -67,13 +41,15 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
-          <Route path="login" element={<LoginPage onAuth={handleAuth} />} />
+          <Route path="login" element={<LoginPage />} />
 
           {/* Protected route inside Layout */}
           <Route
             path="videos"
             element={
-              authenticated ? <VideoPage /> : <Navigate to="/login" replace />
+              <ProtectedRoute>
+                <VideoPage />
+              </ProtectedRoute>
             }
           />
         </Route>

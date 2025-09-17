@@ -3,19 +3,21 @@ import { Visibility, VisibilityOff, Email } from "@mui/icons-material";
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { TextField, Button, CircularProgress, Box } from "@mui/material";
+import { Box, Paper, Button, CircularProgress, IconButton, InputAdornment, TextField } from "@mui/material";
+
 import { snackbarSignal } from '../components/Snackbar';
-import { InputAdornment, IconButton } from "@mui/material";
 import { CiLock } from "react-icons/ci";
 import { useAppState } from "../AppState";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
-const LoginPage = ({onAuth}) => {
+const LoginPage = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const {user} = useAppState();
-    const navigate = useNavigate();
+    const {user, setUser} = useAppState();
+  const navigate = useNavigate();
+  const location = useLocation();
+
     const initialValues = {
         email: "",
         password: "",
@@ -28,6 +30,9 @@ const LoginPage = ({onAuth}) => {
     });
 
     const handleSubmit = async (values) => {
+          // If user was redirected to login, this will be the "from" route
+            const from = location.state?.from?.pathname || "/videos";
+
         try {
             setIsSubmitting(true);
 
@@ -49,16 +54,13 @@ const LoginPage = ({onAuth}) => {
             });
 
             if (data.status) {
-                onAuth?.(true)
-                user.value = data.user;
-                localStorage.setItem("gic-user", JSON.stringify(data.user));
-                // Redirect to dashboard or homepage
-                navigate("/videos")
+                    setUser(data.user); // persist to state + localStorage
+                    navigate(from, { replace: true }); // 🔑 redirect to last attempted page
             }
             
 
         } catch (error) {
-            onAuth?.(false)
+            
             snackbarSignal.open({
                 message: error.message,
             });
@@ -69,16 +71,28 @@ const LoginPage = ({onAuth}) => {
 
     return (
         <div className="login-page" style={{ maxWidth: 400, margin: "50px auto" }}>
-            <h2 className="mb-3">Login</h2>
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
             >
                 {({ errors, touched }) => (
+                     <Paper elevation={3} 
+                        sx={{
+                            p: { xs: 2, sm: 3, md: 5 },        // smaller padding on mobile, bigger on desktop
+                            py: {  md: 10 },        // smaller padding on mobile, bigger on desktop
+                            px: {  md: 7 },        // smaller padding on mobile, bigger on desktop
+                            maxWidth: { xs: "100%", sm: 700 }, // full width on small screens, 400px on larger
+                            mx: "auto",                        // centers horizontally
+                            my: { xs: 2, sm: 4, md: 10 },              // vertical margin (top & bottom)
+                            borderRadius: 2,                   // optional rounded corners
+                        }}>
+
+                     
                     <Form>
+                        <h2 className="pb-5">Login</h2>
                         <Field
-                            className="pb-2"
+                            className="pb-3"
                             as={TextField}
                             fullWidth
                             size="small"
@@ -86,17 +100,17 @@ const LoginPage = ({onAuth}) => {
                             label="Email"
                             error={touched.email && Boolean(errors.email)}
                             helperText={<ErrorMessage name="email" />}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <Email />
-                                    </InputAdornment>
-                                ),
-                            }}
+                            // InputProps={{
+                            //     startAdornment: (
+                            //         <InputAdornment position="start">
+                            //             <Email />
+                            //         </InputAdornment>
+                            //     ),
+                            // }}
                         />
 
-                        <Box className="mb-3">
                             <Field
+                            className="pb-3"
                                 as={TextField}
                                 fullWidth
                                 size="small"
@@ -106,11 +120,11 @@ const LoginPage = ({onAuth}) => {
                                 error={touched.password && Boolean(errors.password)}
                                 helperText={<ErrorMessage name="password" />}
                                 InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <CiLock /> 
-                                        </InputAdornment>
-                                    ),
+                                    // startAdornment: (
+                                    //     <InputAdornment position="start">
+                                    //         <CiLock /> 
+                                    //     </InputAdornment>
+                                    // ),
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <IconButton
@@ -124,7 +138,7 @@ const LoginPage = ({onAuth}) => {
                                     ),
                                 }}
                             />
-                        </Box>
+                        
 
                         <Button
                             type="submit"
@@ -133,10 +147,17 @@ const LoginPage = ({onAuth}) => {
                             fullWidth
                             disabled={isSubmitting}
                             style={{ height: 40, fontSize: 16 }}
+                            className="mt-2"
                         >
                             {isSubmitting ? <CircularProgress size={20} /> : "Login"}
                         </Button>
                     </Form>
+
+
+                    <div className="d-flex mt-3">
+                        <a href="/">Lost Your Password</a>
+                    </div>
+                    </Paper>
                 )}
             </Formik>
         </div>

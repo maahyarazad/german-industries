@@ -6,6 +6,7 @@ const AppStateContext = createContext(null);
 
 export const AppStateProvider = ({ children }) => {
   const state = createAppState();
+  
   return (
     <AppStateContext.Provider value={state}>
       {children}

@@ -18,28 +18,28 @@ import { useAppState } from "../AppState";
 const Header = () => {
     const theme = useTheme();
     const navigate = useNavigate();
-    const { user } = useAppState(); // signals-react state
+    const { user, setUser, authenticated } = useAppState(); // signals-react state
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const toggleDrawer = (open) => () => setDrawerOpen(open);
     
-    useEffect(() => {
-        const savedUser = localStorage.getItem("gic-user");
-        if (savedUser && (!user.value || Object.keys(user.value).length === 0)) {
-            try {
-                user.value = JSON.parse(savedUser);
-                setIsLoggedIn(user.value && Object.keys(user.value).length > 0)
-            } catch (err) {
-                console.error("Failed to parse saved user:", err);
-                localStorage.removeItem("gic-user"); 
-            }
-        }
-  }, [user]);
+  //   useEffect(() => {
+  //       const savedUser = localStorage.getItem("gic-user");
+  //       if (savedUser && (!user.value || Object.keys(user.value).length === 0)) {
+  //           try {
+  //               user.value = JSON.parse(savedUser);
+  //               setIsLoggedIn(user.value && Object.keys(user.value).length > 0)
+  //           } catch (err) {
+  //               console.error("Failed to parse saved user:", err);
+  //               localStorage.removeItem("gic-user"); 
+  //           }
+  //       }
+  // }, [user]);
 
-  useEffect(()=>{
-    setIsLoggedIn(user.value && Object.keys(user.value).length > 0)
-  }, [user])
+  // useEffect(()=>{
+  //   setIsLoggedIn(user.value && Object.keys(user.value).length > 0)
+  // }, [user])
 
    const handleLogout = async () => {
           try {
@@ -57,10 +57,7 @@ const Header = () => {
   
               if (!data.authenticated) {
                   navigate("/")
-                  user.value = null;
-                //   setIsLoggedIn(false);
-                localStorage.removeItem("gic-user"); 
-                  
+                 setUser(null);
                   
               }
               
@@ -124,7 +121,7 @@ const Header = () => {
           </Typography>
 
           {/* Desktop Menu */}
-          {!isMobile && (isLoggedIn ? userLinks : guestLinks)}
+          {!isMobile && (user?.value ? userLinks : guestLinks)}
 
           {/* Mobile Menu Button */}
           {isMobile && (
@@ -142,7 +139,7 @@ const Header = () => {
           role="presentation"
           onClick={toggleDrawer(false)}
         >
-          {isLoggedIn ? (
+          {user?.value ? (
             <Box display="flex" flexDirection="column" gap={2}>
               <Typography>Welcome, {user.value?.firstName}</Typography>
               <Button

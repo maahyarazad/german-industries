@@ -4,89 +4,73 @@ import Slide from "@mui/material/Slide";
 import { IoMdClose } from "react-icons/io";
 // Create a "signal" to control the Snackbar externally
 export const snackbarSignal = {
-  open: null, // this will be assigned inside the component
-  messageType: null, // this will be assigned inside the component
+    open: null, // this will be assigned inside the component
+    messageType: null, // this will be assigned inside the component
 };
 
 // Slide transition function
 function SlideTransition(props) {
-  return <Slide {...props} direction="left" />;
+    return <Slide {...props} direction="left" />;
 }
 
 // Rename the component to avoid conflict
 export default function AppSnackbar() {
-  const [state, setState] = React.useState({
-    open: false,
-    message: "",
-    messageType:""
-  });
-
-  // Assign the "signal" function
-  snackbarSignal.open = ({ message = "", messageType= "" }) => {
-    console.log(messageType);
-    setState({
-      open: true,
-      message,
-      messageType
+    const [state, setState] = React.useState({
+        open: false,
+        message: "",
+        messageType: ""
     });
-  };
 
-  const handleClose = () => {
-    setState((prev) => ({ ...prev, open: false }));
-  };
+    // Assign the "signal" function
+    snackbarSignal.open = ({ message = "", messageType = "" }) => {
+        console.log(messageType);
+        setState({
+            open: true,
+            message,
+            messageType
+        });
+    };
 
- const action = (
-        <>
-            <span
-                size="small"
-                aria-label="close"
-                color="inherit"
-                onClick={handleClose}
-                style={{ cursor: 'pointer' }}
-            >
-                <IoMdClose fontSize="24px" />
-            </span>
-        </>
+    const handleClose = () => {
+        setState((prev) => ({ ...prev, open: false }));
+    };
+
+    const action = (
+        <span
+            aria-label="close"
+            onClick={handleClose}
+            style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+        >
+            <IoMdClose fontSize="20px" />
+        </span>
     );
 
-  return (
-    <MuiSnackbar
-       autoHideDuration={99999}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={state.open}
-      onClose={handleClose}
-      TransitionComponent={SlideTransition} // always use Slide
-      ContentProps={{
-      sx: {
-        backgroundColor:
-          state.messageType === true ? "#4caf50" : "#f44336", // green or red
-        color: "#fff", // text color
-      },
-    }}
-       message={
-               
-                <div className='d-flex justify-content-between' style={{minWidth:400 , maxWidth: 600}}>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <div className="d-flex justify-content-center align-items-center">
-                            {
-                                state.messageType === 'success' ?
-                            
-                                   <></>
-                                    :
-                                    <></>
-                            }
-                        </div>
-                        <div className='ps-2 d-flex justify-content-center align-items-center' >
-                            {state.message}
-                        </div>
+    return (
+        <MuiSnackbar
+            autoHideDuration={99999}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            open={state.open}
+            onClose={handleClose}
+            TransitionComponent={SlideTransition}
+            ContentProps={{
+                sx: {
+                    width: { xs: "100%", sm: "auto" }, // full width on mobile
+                    maxWidth: "100%",
+                    borderRadius: { xs: 1, sm: 1 },
+                    backgroundColor: state.messageType ? "#4caf50" : "#f44336",
+                    color: "#fff",
+                },
+            }}
+            message={
+                <div className="d-flex align-items-center" style={{ minWidth: 300, maxWidth: 600 }}>
+                    {/* Optional icon based on messageType */}
+                    <div className="d-flex align-items-center pe-2">
+                        {state.messageType === "success" ? <></> : <></>}
                     </div>
-                    
-                    <div className='d-flex justify-content-center align-items-center'>
-                        {action}
-                    </div>
+                    <div>{state.message}</div>
                 </div>
             }
-      
-    />
-  );
+            action={action} // ✅ close button in the right slot
+        />
+    );
 }

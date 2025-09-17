@@ -5,9 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppState } from "../AppState";
 const LandingPage = () => {
     const navigate = useNavigate();
-const { todos, completed } = useAppState();
-console.log(todos.value)
-console.log(completed.value)
+
 
     return (
         

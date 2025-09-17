@@ -1,15 +1,15 @@
-import { useNavigate, Navigate, Outlet } from "react-router-dom";
+// src/components/ProtectedRoute.jsx
+import { Navigate, useLocation } from "react-router-dom";
+import { useAppState } from "../AppState";
+
+export default function ProtectedRoute({ children }) {
+  const { user, authenticated } = useAppState();
+  const location = useLocation();
 
 
-const ProtectedRoute = ({ redirectPath = "/login" }) => {
-
-  const navigate = useNavigate();  
-  
-  if (!authenticated) {
-    return <Navigate to={redirectPath} replace />;
+  if (!authenticated.value) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
-  return <Outlet />;
-};
 
-
-export default ProtectedRoute;
+  return children;
+}

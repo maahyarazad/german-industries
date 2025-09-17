@@ -14,6 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useAppState } from "../AppState";
+import GIC_logo from '../assets/logo-white.png';
 
 const Header = () => {
     const theme = useTheme();
@@ -21,30 +22,11 @@ const Header = () => {
     const { user, setUser, authenticated } = useAppState(); // signals-react state
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const toggleDrawer = (open) => () => setDrawerOpen(open);
     
-  //   useEffect(() => {
-  //       const savedUser = localStorage.getItem("gic-user");
-  //       if (savedUser && (!user.value || Object.keys(user.value).length === 0)) {
-  //           try {
-  //               user.value = JSON.parse(savedUser);
-  //               setIsLoggedIn(user.value && Object.keys(user.value).length > 0)
-  //           } catch (err) {
-  //               console.error("Failed to parse saved user:", err);
-  //               localStorage.removeItem("gic-user"); 
-  //           }
-  //       }
-  // }, [user]);
-
-  // useEffect(()=>{
-  //   setIsLoggedIn(user.value && Object.keys(user.value).length > 0)
-  // }, [user])
+    const toggleDrawer = (open) => () => setDrawerOpen(open);
 
    const handleLogout = async () => {
           try {
-              
-
               const response = await fetch(`${import.meta.env.VITE_SERVER_URL_GIC}/gic-user/logout`, {
                   method: "POST",
                   headers: {
@@ -57,8 +39,7 @@ const Header = () => {
   
               if (!data.authenticated) {
                   navigate("/")
-                 setUser(null);
-                  
+                  setUser(null);
               }
               
   
@@ -117,7 +98,7 @@ const Header = () => {
             sx={{ fontWeight: "bold", cursor: "pointer" }}
             onClick={() => navigate("/")}
           >
-            German Industrial Club
+            <img src={GIC_logo} height={50} alt="German Industry Club"/>
           </Typography>
 
           {/* Desktop Menu */}

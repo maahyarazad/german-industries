@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppState } from "../AppState";
 const LandingPage = () => {
     const navigate = useNavigate();
-
+ const {user, setUser, authenticated} = useAppState();
 
     return (
         
@@ -22,7 +22,16 @@ const LandingPage = () => {
                     </h2>
                 </div>
                 <div>
-
+{authenticated.value?
+<Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        sx={{ textTransform: "none", width: "200px" }}
+                        onClick={() => navigate("/videos")}>
+                        Go to videos
+                    </Button>
+:
                     <Button
                         variant="contained"
                         color="primary"
@@ -31,6 +40,7 @@ const LandingPage = () => {
                         onClick={() => navigate("/login")}>
                         Login to continue
                     </Button>
+}
                 </div>
 
             </div>

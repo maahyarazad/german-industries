@@ -9,24 +9,23 @@ import { snackbarSignal } from '../components/Snackbar';
 import { CiLock } from "react-icons/ci";
 import { useAppState } from "../AppState";
 import { useLocation, useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
+
 
 const ResetPasswordPage = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
     const { user, setUser } = useAppState();
     const navigate = useNavigate();
     const location = useLocation();
 
     const initialValues = {
         email: "",
-        password: "",
+        
     };
     const validationSchema = Yup.object().shape({
         email: Yup.string()
             .email("Please enter a valid email address.")
             .required("Email is required."),
-        password: Yup.string().required("Password is required"),
+        
     });
 
     const handleSubmit = async (values) => {
@@ -37,7 +36,7 @@ const ResetPasswordPage = () => {
             setIsSubmitting(true);
 
             // Send login request (JSON body instead of FormData)
-            const response = await fetch(`${import.meta.env.VITE_SERVER_URL_GIC}/gic-user/login`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL_GIC}/gic-user/reset-password`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -90,7 +89,7 @@ const ResetPasswordPage = () => {
 
 
                         <Form>
-                            <h2 className="pb-5">Login</h2>
+                            <h2 className="pb-5">Reset Your Password</h2>
                             <Field
                                 className="pb-3"
                                 as={TextField}
@@ -109,35 +108,6 @@ const ResetPasswordPage = () => {
                             // }}
                             />
 
-                            <Field
-                                className="pb-3"
-                                as={TextField}
-                                fullWidth
-                                size="small"
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                label="Password"
-                                error={touched.password && Boolean(errors.password)}
-                                helperText={<ErrorMessage name="password" />}
-                                InputProps={{
-                                    // startAdornment: (
-                                    //     <InputAdornment position="start">
-                                    //         <CiLock /> 
-                                    //     </InputAdornment>
-                                    // ),
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                edge="end"
-                                                size="small"
-                                            >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
 
 
                             <Button
@@ -149,14 +119,13 @@ const ResetPasswordPage = () => {
                                 style={{ height: 40, fontSize: 16 }}
                                 className="mt-2"
                             >
-                                {isSubmitting ? <CircularProgress size={20} /> : "Login"}
+                                {isSubmitting ? <CircularProgress size={20} /> : "Reset Your Password"}
                             </Button>
                         </Form>
-
-
                         <div className="d-flex mt-3">
-                            <a href="/">Lost Your Password</a>
-                        </div>
+                        <a href="/login">Back to Login</a>
+                    </div>
+
                     </Paper>
                 )}
             </Formik>
@@ -164,4 +133,4 @@ const ResetPasswordPage = () => {
     );
 };
 
-export default LoginPage;
+export default ResetPasswordPage;

@@ -171,3 +171,18 @@ main{
   justify-content: center;
   align-items: center;
 }
+
+
+
+/* Override Bootstrap active state for playlist items */
+.list-group-item.active {
+    background-color: #0D1B2A !important; /* MUI primary dark navy */
+    color: #fff !important;               /* Text color */
+    border-color: #0D1B2A !important;     /* Optional: match border to bg */
+}
+
+/* Optional: hover state for non-active items */
+.list-group-item:hover {
+    background-color: #f0f0f0; /* Light grey or any color you prefer */
+    color: #0D1B2A;
+}

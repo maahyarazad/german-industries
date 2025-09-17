@@ -20,7 +20,7 @@ const LoginPage = () => {
             navigate("/");
         }
     }, [])
-    
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -165,7 +165,7 @@ const LoginPage = () => {
 
 
                     <div className="d-flex mt-3">
-                        <a href="/">Lost Your Password</a>
+                        <a href="/reset-password">Lost Your Password</a>
                     </div>
                     </Paper>
                 )}

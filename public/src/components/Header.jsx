@@ -15,6 +15,7 @@ import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useAppState } from "../AppState";
 import GIC_logo from '../assets/logo-white.png';
+import Avatar from '@mui/material/Avatar';
 
 const Header = () => {
     const theme = useTheme();
@@ -79,10 +80,11 @@ const Header = () => {
 
   const userLinks = (
     <Box display="flex" alignItems="center" gap={2}>
+      <Avatar src="/broken-image.jpg" />
       <Typography variant="body1">
         Welcome, {user.value?.firstName || "User"}
       </Typography>
-      <Button color="inherit" className="text-capitalize" onClick={handleLogout}>
+      <Button color="inherit" className="text-capitalize" onClick={handleLogout} variant="outlined">
         Logout
       </Button>
     </Box>
@@ -122,9 +124,10 @@ const Header = () => {
         >
           {user?.value ? (
             <Box display="flex" flexDirection="column" gap={2}>
+              <Avatar src="/broken-image.jpg" />
               <Typography>Welcome, {user.value?.firstName}</Typography>
               <Button
-                variant="text"
+                variant="outlined"
                 color="primary"
                 onClick={handleLogout}
                 className="text-capitalize"

@@ -74,14 +74,14 @@ const VideoPage = () => {
                             ))}
                         </div>
                     </div>
- {/* Playlist Section */}
+                    {/* Playlist Section */}
                     <div className="col-12 col-md-4">
                         <h5>Playlist</h5>
                         <ul className="list-group">
                             {dummyVideos.map((video) => (
-                                <li key={video.id} className="list-group-item">
+                                <li key={video.id} className={`list-group-item ${video.id === selectedVideo.id ? "active" : ""} `} >
                                     <button
-                                        className="btn btn-link p-0 text-start w-100"
+                                        className={`btn p-0 text-start w-100 border-0 ${video.id === selectedVideo.id ? "text-white" : ""}`}
                                         onClick={() => setSelectedVideo(video)}
                                     >
                                         {video.title}

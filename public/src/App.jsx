@@ -12,6 +12,7 @@ import theme from "./theme"; // pick one of the two above
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import { useAppState } from "./AppState";
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 
 const RouteLoader = () => {
@@ -42,6 +43,7 @@ function AppRoutes() {
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
           <Route path="login" element={<LoginPage />} />
+          <Route path="reset-password" element={<ResetPasswordPage />} />
 
           {/* Protected route inside Layout */}
           <Route
